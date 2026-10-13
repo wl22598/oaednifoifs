@@ -1,5 +1,30 @@
-# E316M Reading Texts
+# 知序新入口：试验用完整代理
 
-Text files extracted from the supplied E316M course readings archive. Original filenames and text are preserved.
+此包只转发到现有知序学习网站；不提供任意网址代理，不附带平台管理密钥，不绕过原站登录和安全限制。课程和账户数据库仍在原站。尚未上线，也未在大陆验证。
 
-The `readings/` directory contains 14 text files. Extracted text may contain OCR and formatting artifacts; consult the original readings for accurate quotations.
+## 发布（不需要买域名）
+
+1. 将本文件夹上传到自己控制的 GitHub 仓库，勿混入原站数据库、学习记录、账号口令或密钥。
+2. 在 https://dashboard.render.com 注册或登录，用 GitHub 连接该仓库。
+3. 创建 Web Service，选择 Node，Build Command 为 `npm ci`，Start Command 为 `npm start`，先选择 Free 测试方案。可使用本包的 `render.yaml` 创建 Blueprint。服务自带 HTTPS 的 onrender.com 网址。
+4. Render 自动提供 RENDER_EXTERNAL_URL；其他平台需设置 PUBLIC_URL 为生成的 HTTPS 网址（仅域名，不含路径）。本包没有上游网址环境变量，防止误配置成开放代理。
+5. 用部署后网址做下面的验收。平台可能要求账号验证；无法从这里替用户创建账号或付款。
+
+## 必须完成的线上验收
+
+- 健康检查只确认代理进程启动，不代表原站访问正常。
+- 大陆朋友使用无 VPN 的实际 Wi-Fi 和手机流量打开首页。若平台域名也打不开，停止这条路线，不把代理当成已修复。
+- 使用本人有权限的学习账户登录，打开 CFA、能源、初级会计、全球信息课程。
+- 做一道练习、保存进度、登出并重新登录，核对进度；检查旧网址能读到同一账户的新进度。
+- 用不同账户验证进度互不串用，检查错题与复测保存。
+- 验证 PDF/附件下载、移动端界面、语音（如有）、站内跳转不会把浏览器带回旧网址。
+- ChatGPT 管理员 OAuth 的回调域名可能需要托管方配置；本代理不能自动修改回调注册，也不能承诺管理员登录在新域名上可用。
+- 原站返回 Cloudflare 拦截或验证码时，代理保持原状态；需托管方处理或迁移整站。未实现 WebSocket；若实际站点需要它，需补充后才验收。
+
+Free 服务闲置后会休眠，首次打开可能等待；适合可行性试验。新平台的大陆可达性没有已验证承诺。
+
+## 本地验证
+
+Node 22+：`npm ci`，然后 `npm test`。测试使用本地模拟原站，不涉及真实密码、访问真实账户或大陆网络。代理处理 Cookie 的 Domain、同站 Location 和文本中的原站绝对链接，保护跨站写请求，保留上游错误码。请求体上限 2MiB，文本响应上限 16MiB；较大的上传需要重新评估。二进制附件流式转发。
+
+参考： https://render.com/docs/web-services 、 https://render.com/docs/free

@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: zhixu-access-test
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /__proxy_health
+    autoDeployTrigger: off
